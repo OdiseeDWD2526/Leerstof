@@ -29,6 +29,8 @@ btn.addEventListener('click', (event) =>{
 });
 
 btn_todo.addEventListener('click', (event) => {
+    p.classList.toggle('hidden');
+
     //console.log(in_todo);
     let text = in_todo.value;
     
@@ -36,6 +38,7 @@ btn_todo.addEventListener('click', (event) => {
 
     let ele_div = document.createElement('div');
     ele_div.innerText = text;
+
     ele_div.setAttribute('data-pid', div_todo.childElementCount);
     /*ele_div.addEventListener('click', ()=>{
         ele_div.classList.toggle('benadrukt');

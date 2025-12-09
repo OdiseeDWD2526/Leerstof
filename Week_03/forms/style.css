@@ -50,3 +50,24 @@ input {
 .hidden {
   display: none;
 }
+
+
+form#loginForm input:required {
+  background-color: yellow;
+}
+
+form#loginForm input:optional {
+  background-color: green;
+}
+
+form#loginForm input:disabled {
+  background-color:grey;
+}
+
+form#loginForm input:invalid {
+  background-color: red;
+}
+
+form#loginForm input:valid {
+  background-color: blue;
+} 
