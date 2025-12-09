@@ -18,13 +18,45 @@
   
   <form id="loginForm" action="form2.html" method="get" autocomplete="off" novalidate>
 	<label for="username">Username</label>
-    <input type="text" name="username" id="username" value="Jens"><br>
+    <input type="text" name="username" id="username" value="Jens" minlength="4"><br> <!--de minlength wordt niet gecontroleerd bij het submit event-->
 
     <label for="password">Password</label>
-    <input type="password" name="password" id="password" disabled><br>
+    <input type="password" name="password" id="password" required><br>
+
+    <label for="geboortedatum">Geboortedatum:</label>
+    <input type="date" name="birthdate" id="geboortedatum" optional><br>
+    
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email" pattern=".+@student\.odisee\.be"><br> 
+    <!--pattern kan gebruikt worden voor een regexexpressie
+      * -> 0 of meer keer het symbool ervoor
+      + -> 1 of meer keer het symbool ervoor
+      . -> wildcard voor alle tekens
+      \ -> om het volgende teken exact te hebben en niet de speciale functie
+    -->
+
+    <label for="age">Leeftijd:</label>
+    <input type="number" name="age" id="age" min="18" max="80"><br>
+
+    <input type="radio" id="radio1" name="radio" value="1"><label for="radio1">Optie 1</label><br>
+    <input type="radio" id="radio2" name="radio" value="2"><label for="radio2">Optie 2</label><br>
+
+    <input type="checkbox" id="chk" name="chk"><label for='chk'>chk</label><br>
+    <!-- Geef radio buttons dezelfde naam om maar 1 optie toe te laten-->
+
+    <label>Select aantal</label>
+    <select name="select" id="select" disabled>
+      <option value="1">NL</option>
+      <option value="2">FR</option>
+    </select><br>
+
+    <label for="opmerkingen">Opmerkingen:</label>
+    <textarea name="opmerkingen" id="opmerkingen"></textarea><br>
 	
     <button type="submit" id="sendbtn">Send</button>
   </form>
+
+  <!-- required, disabled, optional-->
   
   
   <script src="form.js"></script>

@@ -51,7 +51,7 @@ input {
   display: none;
 }
 
-
+/*
 form#loginForm input:required {
   background-color: yellow;
 }
@@ -70,4 +70,4 @@ form#loginForm input:invalid {
 
 form#loginForm input:valid {
   background-color: blue;
-} 
+} */
