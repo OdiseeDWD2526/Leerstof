@@ -1,4 +1,4 @@
-const restaurantClosed = true;
+const restaurantClosed = false;
 
 function executeTask(task, time){
 	console.log(task);
@@ -44,6 +44,7 @@ function orderPizza(size, saus, toppings){
 		.catch(()=> {
 			console.log('het restaurant is gesloten');
 		});
+	console.log('test');
 }
 
 
@@ -52,13 +53,8 @@ orderPizza('large', 'tomatensaus', ['ham', 'spek', 'mozzerella']);
 
 
 // Voorbeeld promise.all.
-
-const pokemon1 = fetch('https://pokeapi.co/api/v2/pokemon');
-const pokemon2 = fetch('https://pokeapi.co/api/v2/pokemon?offset=20');
-
-Promise.all([pokemon1, pokemon2]).then((responses)=> {
-	const jsons = responses.map((response) => response.json());
-	return Promise.all(jsons);
-}).then((jsons)=> {
-	jsons.forEach(e=> console.log(e));
+fetch('https://pokeapi.co/api/v2/pokemon').then((x) =>{
+	return x.json();
+}).then((json) => {
+	console.log(json);
 });
