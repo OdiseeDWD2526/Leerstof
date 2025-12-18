@@ -5,10 +5,10 @@ const productenTabel = document.getElementById('productenTabel');
 const geselecteerd = document.getElementById('geselecteerd');
 
 // waar de totaalprijs in zal geplaatst worden
-const totaalPrijs = document.getElementById('totaalPrijs');
+const totaalPrijsEle = document.getElementById('totaalPrijs');
 
 // wat we gaan gebruiken om de geselecteerde producten bij te houden
-const winkelkar = {};
+let winkelkar = {};
 
 // de lijst met onze productgegevens. Later haal je dit soort gegevens op 
 // uit een API
@@ -18,26 +18,106 @@ const gegevens = [{"PR_ID":112,"PR_CT_ID":1,"PR_naam":"Appel","PR_prijs":10},{"P
 // Vul de productenTabel met de gegevens die we hebben
 toonGegevens();
 
-productenTabel.addEventListener('click', (e) => {
-});
+loadWinkelkar();
+updateWinkelkar();
 
-function addProduct(id) {
+function saveWinkelkar(){
+	localStorage.setItem('winkelkar', JSON.stringify(winkelkar));
 }
 
-function removeProduct(id) {
+function loadWinkelkar(){
+	console.log(localStorage.getItem('winkelkar'));
+	if(localStorage.getItem('winkelkar'))
+		winkelkar = JSON.parse(localStorage.getItem('winkelkar'));
 }
 
 function updateWinkelkar() {
+	// bereken totaal aantal producten
+	let aantalGeselecteerd = 0;
+	// bereken de totale prijs
+	let totaalPrijs = 0;
+	for(const id in winkelkar){
+		aantalGeselecteerd += winkelkar[id];
+
+		for(const p of gegevens){
+			if(p.PR_ID == id){
+				totaalPrijs += winkelkar[id] * p.PR_prijs;
+			}
+		}
+		
+		productenTabel.querySelector('#data-aantal-' + id).innerText = winkelkar[id];
+	}
+
+	// toon deze waarden doen
+	geselecteerd.innerText = aantalGeselecteerd;
+	totaalPrijsEle.innerText = totaalPrijs;
+
+	saveWinkelkar();
 }
+
+function addProduct(id) {
+	console.log(winkelkar);
+
+	// als het product niet in het winkelmandje staat, voeg het toe
+	if(!winkelkar[id]){
+		// id bestaat niet in de dictionary
+		winkelkar[id] = 1;
+	} else{
+		// anders moet je het aantal + 1 doen
+		winkelkar[id]++;
+	}
+
+	// aantal in de tabel updaten
+	// document.querySelector('#data-aantal-' + id).innerText = winkelkar[id];
+	// dit kan lichtjes geoptimaliseerd worden door te zeggen in welk element het moet gezocht worden
+	// in dit geval weten we dat het in de tabel met producten zit dus kunnen we dit nemen als startpunt
+	//productenTabel.querySelector('#data-aantal-' + id).innerText = winkelkar[id];
+
+	// winkel kar updaten (geselecteerd en prijs)
+	updateWinkelkar();
+}
+
+function removeProduct(id) {
+
+	// als het product niet in het winkelmandje staat, doe niets
+	if(!winkelkar[id] || winkelkar[id] == 0){
+		return;
+	} else{
+		// als het wel bestaat -> verwijderen we het als er exact 1 in zit
+		winkelkar[id]--;
+	}
+
+	productenTabel.querySelector('#data-aantal-' + id).innerText = winkelkar[id];
+
+	// winkel kar updaten (geselecteerd en prijs)
+	updateWinkelkar();
+}
+
+productenTabel.addEventListener('click', (event) => {
+	// deze gaat kijken welke actie er moet uitgevoerd worden
+	const action = event.target.getAttribute('data-action');
+	const pid = event.target.getAttribute('data-id');
+
+	if(action=== 'add'){
+		addProduct(pid);
+	} else if(action ==='remove'){
+		removeProduct(pid);
+	}
+
+	console.log(action, pid);
+
+});
+
+
 
 function toonGegevens() {
   
-  // we werken hier met string concatenatie
-  // merk op dat we slechts 1 DOM-update, nadat we door alle gegevens hebben gelopen
-  let tijdelijkeString = '';
+	// we werken hier met string concatenatie
+	// merk op dat we slechts 1 DOM-update, nadat we door alle gegevens hebben gelopen
+	let tijdelijkeString = '';
   
-  gegevens.forEach((record) => {
-     tijdelijkeString += `
+	gegevens.forEach((record) => {
+		tijdelijkeString += `
       <tr>
         <td>${record.PR_naam}</td>
         <td>${record.PR_prijs}</td>
@@ -54,9 +134,9 @@ function toonGegevens() {
           
         </td>        
       </tr>`;
-  });
+	});
   
-  productenTabel.innerHTML  = tijdelijkeString; 
+	productenTabel.innerHTML  = tijdelijkeString; 
 }
 
 
