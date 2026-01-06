@@ -12,18 +12,71 @@ let winkelkar = {};
 
 // de lijst met onze productgegevens. Later haal je dit soort gegevens op 
 // uit een API
-const gegevens = [{"PR_ID":112,"PR_CT_ID":1,"PR_naam":"Appel","PR_prijs":10},{"PR_ID":113,"PR_CT_ID":2,"PR_naam":"Granaatappel","PR_prijs":20},{"PR_ID":114,"PR_CT_ID":2,"PR_naam":"Boemkool","PR_prijs":15},{"PR_ID":133,"PR_CT_ID":1,"PR_naam":"Banaanaanwagen","PR_prijs":10},{"PR_ID":132,"PR_CT_ID":1,"PR_naam":"Framboos","PR_prijs":3},{"PR_ID":131,"PR_CT_ID":2,"PR_naam":"Andrijvie","PR_prijs":1.5},{"PR_ID":123,"PR_CT_ID":1,"PR_naam":"Bananasplit","PR_prijs":5},{"PR_ID":122,"PR_CT_ID":1,"PR_naam":"Hanananas","PR_prijs":5},{"PR_ID":121,"PR_CT_ID":1,"PR_naam":"Zuurpruim","PR_prijs":100},{"PR_ID":124,"PR_CT_ID":2,"PR_naam":"Ui","PR_prijs":2},{"PR_ID":130,"PR_CT_ID":1,"PR_naam":"Skiwi","PR_prijs":2},{"PR_ID":126,"PR_CT_ID":1,"PR_naam":"Spruitjes","PR_prijs":5},{"PR_ID":127,"PR_CT_ID":1,"PR_naam":"GestoofdePeren","PR_prijs":5},{"PR_ID":128,"PR_CT_ID":1,"PR_naam":"Gebakken peren","PR_prijs":10},{"PR_ID":135,"PR_CT_ID":2,"PR_naam":"Spinazie","PR_prijs":1.23},{"PR_ID":136,"PR_CT_ID":2,"PR_naam":"Spruiten","PR_prijs":3},{"PR_ID":137,"PR_CT_ID":2,"PR_naam":"Schorseneren","PR_prijs":5},{"PR_ID":145,"PR_CT_ID":1,"PR_naam":"Pampelmous","PR_prijs":2}];
+const gegevens = [
+	{"PR_ID":112,"PR_CT_ID":1,"PR_naam":"Appel","PR_prijs":10},
+	{"PR_ID":113,"PR_CT_ID":2,"PR_naam":"Granaatappel","PR_prijs":20},
+	{"PR_ID":114,"PR_CT_ID":2,"PR_naam":"Boemkool","PR_prijs":15},
+	{"PR_ID":133,"PR_CT_ID":1,"PR_naam":"Banaanaanwagen","PR_prijs":10},
+	{"PR_ID":132,"PR_CT_ID":1,"PR_naam":"Framboos","PR_prijs":3},
+	{"PR_ID":131,"PR_CT_ID":2,"PR_naam":"Andrijvie","PR_prijs":1.5},
+	{"PR_ID":123,"PR_CT_ID":1,"PR_naam":"Bananasplit","PR_prijs":5},
+	{"PR_ID":122,"PR_CT_ID":1,"PR_naam":"Hanananas","PR_prijs":5},
+	{"PR_ID":121,"PR_CT_ID":1,"PR_naam":"Zuurpruim","PR_prijs":100},
+	{"PR_ID":124,"PR_CT_ID":2,"PR_naam":"Ui","PR_prijs":2},
+	{"PR_ID":130,"PR_CT_ID":1,"PR_naam":"Skiwi","PR_prijs":2},
+	{"PR_ID":126,"PR_CT_ID":1,"PR_naam":"Spruitjes","PR_prijs":5},
+	{"PR_ID":127,"PR_CT_ID":1,"PR_naam":"GestoofdePeren","PR_prijs":5},
+	{"PR_ID":128,"PR_CT_ID":1,"PR_naam":"Gebakken peren","PR_prijs":10},
+	{"PR_ID":135,"PR_CT_ID":2,"PR_naam":"Spinazie","PR_prijs":1.23},
+	{"PR_ID":136,"PR_CT_ID":2,"PR_naam":"Spruiten","PR_prijs":3},
+	{"PR_ID":137,"PR_CT_ID":2,"PR_naam":"Schorseneren","PR_prijs":5},
+	{"PR_ID":145,"PR_CT_ID":1,"PR_naam":"Pampelmous","PR_prijs":2}
+];
+
+const gegevensObj = {
+	112:{naam: 'appel', prijs: 10},
+	113:{naam: 'granaatappel', prijs: 20},
+	/*112:{},
+	112:{},
+	112:{},
+	112:{},
+	112:{},
+	112:{},
+	112:{},
+	112:{},
+	112:{},
+	112:{},
+	112:{},
+	112:{},
+	112:{},
+	112:{},
+	112:{},
+	112:{},*/
+}
 
 
 // Vul de productenTabel met de gegevens die we hebben
 toonGegevens();
 
-loadWinkelkar();
-updateWinkelkar();
+//loadWinkelkar();
+//updateWinkelkar();
 
 function saveWinkelkar(){
 	localStorage.setItem('winkelkar', JSON.stringify(winkelkar));
 }
+/*
+async function loadWinkelkarFromDatabase(){
+	try {
+		const response = await fetch('mijn.server.com/winkelkar/userid'); // voeg authorizatie toe
+		
+		if(response.ok){
+			const json = await response.json();
+			winkelkar = json.winkelkar;
+		}
+	} catch (error) {
+		// notify of server error;
+	} 
+} */
 
 function loadWinkelkar(){
 	console.log(localStorage.getItem('winkelkar'));
@@ -39,12 +92,14 @@ function updateWinkelkar() {
 	for(const id in winkelkar){
 		aantalGeselecteerd += winkelkar[id];
 
+		totaalPrijs += gegevensObj[id].prijs * winkelkar[id];
+/*
 		for(const p of gegevens){
 			if(p.PR_ID == id){
 				totaalPrijs += winkelkar[id] * p.PR_prijs;
 			}
 		}
-		
+*/		
 		productenTabel.querySelector('#data-aantal-' + id).innerText = winkelkar[id];
 	}
 
@@ -116,25 +171,27 @@ function toonGegevens() {
 	// merk op dat we slechts 1 DOM-update, nadat we door alle gegevens hebben gelopen
 	let tijdelijkeString = '';
   
-	gegevens.forEach((record) => {
+	for(const id in gegevensObj){
+		let record = gegevensObj[id];
+
 		tijdelijkeString += `
       <tr>
-        <td>${record.PR_naam}</td>
-        <td>${record.PR_prijs}</td>
-        <td id='data-aantal-${record.PR_ID}'></td>
+        <td>${record.naam}</td>
+        <td>${record.prijs}</td>
+        <td id='data-aantal-${id}'></td>
         <td>
         
-          <a class='btn text icon-left' data-id='${record.PR_ID}' data-action='add'>
-            <i class="large material-icons" data-id='${record.PR_ID}' data-action='add'>add</i>
+          <a class='btn text icon-left' data-id='${id}' data-action='add'>
+            <i class="large material-icons" data-id='${id}' data-action='add'>add</i>
           </a>
           
-          <a class='btn text icon-left' data-id='${record.PR_ID}' data-action='remove'>
-            <i class="large material-icons" data-id='${record.PR_ID}' data-action='remove'>remove</i>
+          <a class='btn text icon-left' data-id='${id}' data-action='remove'>
+            <i class="large material-icons" data-id='${id}' data-action='remove'>remove</i>
           </a>
           
         </td>        
       </tr>`;
-	});
+	};
   
 	productenTabel.innerHTML  = tijdelijkeString; 
 }

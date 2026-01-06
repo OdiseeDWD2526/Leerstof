@@ -36,6 +36,10 @@ async function postAndGet(data){
 		body: JSON.stringify(data)
 	});
 
+	if(!response.ok){
+		return;
+	}
+	
 	let json = await response.json();
 	console.log(json);
 
